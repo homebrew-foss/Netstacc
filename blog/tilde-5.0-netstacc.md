@@ -5,12 +5,12 @@ tags: [tilde-5.0, networking, c, systems]
 description: A custom TCP/IP network stack built from scratch in C, complete with a live HTML dashboard served via a minimal internal HTTP server.
 permalink: posts/{{ title | slug }}/index.html
 author_name: "Team Netstacc"
-author_link: "https://github.com/homebrew-ec-foss/Netstacc"
+author_link: "https://github.com/homebrew-foss/Netstacc"
 ---
 
 # Tilde 5.0 Netstacc: A Custom TCP/IP Network Stack
 
-Written By [Team Netstacc](https://github.com/homebrew-ec-foss/Netstacc)
+Written By [Team Netstacc](https://github.com/homebrew-foss/Netstacc)
 
 Tilde 5.0 | 8 min read
 
@@ -53,7 +53,7 @@ Along with these parsers, we made a live dashboard so we can actually watch what
 
 ## How Did We Build It: Architecture
 
-![Architecture diagram](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/architecture.png)
+![Architecture diagram](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/architecture.png)
 > *Each row roughly corresponds to a specific week's agenda in our 5-week roadmap.*
 
 This has been our roadmap for the entire 5 weeks. By the end, you'll probably notice this looks exactly like a packet passing through different layers and parsers — because that's exactly what it is.
@@ -116,7 +116,7 @@ Once this is set up, the idea is pretty simple: pinging `10.0.0.2` from another 
 
 That one `read()` call is the entire handoff from kernel space to userspace. Everything after it is ours to mess with (or break, which happened a lot in week 1 :D).
 
-![TUN packet flow](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/tun.jpg)
+![TUN packet flow](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/tun.jpg)
 > *How a ping flows from the host terminal, through tun0, into our C program, and back out.*
 
 **To try it:** `sudo ip addr add 10.0.0.1/24 dev tun0 && sudo ip link set dev tun0 up`, then `ping -c 3 10.0.0.2` from another terminal. The raw packets show up on the Netstacc side.
@@ -158,7 +158,7 @@ Once we've read what we need, we pass the same pointer forward, first to verify 
 
 **We don't copy the packet around at every step**, we just pass pointers into the same buffer. The memory is only copied once, at the initial `read()`.
 
-![IPv4 header layout](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/ipv4.jpeg)
+![IPv4 header layout](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/ipv4.jpeg)
 > *The IPv4 header byte layout. Each field maps directly to a struct member in our code.*
 
 ---
@@ -271,7 +271,7 @@ Its header is correspondingly simple. It consists of just four 16-bit fields, ma
 - **Length:** tells us the size of the UDP datagram
 - **Checksum:** used to verify the integrity of the packet
 
-![UDP diagram - header](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/udp-v2.jpeg)
+![UDP diagram - header](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/udp-v2.jpeg)
 > *The UDP pseudo-header exists only for checksum math, then gets thrown away.*
 
 And if you notice, **there are no IP addresses here!** Well, that's because UDP sits on top of IP, and the source and destination IP addresses have already been handled by the IPv4 layer.
@@ -321,7 +321,7 @@ One bug we ran into here was with the UDP length field. We were using it in host
 
 And to make sure we weren't just convincing ourselves that the checksum worked, we compared our computed values with Wireshark's checksum calculations for the exact same packets!
 
-![Wireshark live packet capture on tun0](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/wireshark.png)
+![Wireshark live packet capture on tun0](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/wireshark.png)
 > *Live packet dissection on tun0 in Wireshark: verifying packet bytes, IP headers, and raw payload directly on the wire.*
 
 ---
@@ -378,7 +378,7 @@ Let's zoom into the part where the connection actually begins. Before any data i
 
 Both sides need to make sure that the other side is reachable, and they also need to agree on the **sequence numbers** they'll use for the connection.
 
-![Three-way handshake diagram](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/tcp.jpeg)
+![Three-way handshake diagram](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/tcp.jpeg)
 > *Three messages, and a state machine that has to track every one of them correctly.*
 
 It starts with the client sending a SYN.
@@ -461,10 +461,10 @@ We build an `HTTP/1.1 200 OK` response by hand right there in `classifier.c` (st
 
 So when you open `http://10.0.0.1:8080` or `curl` it, our TCP stack is literally the one handling your browser's request. Same code path as a ping reply, just with HTTP on top.
 
-![Dashboard live view](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/dashboard-live.png)
+![Dashboard live view](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/dashboard-live.png)
 > *Per-protocol counts, drops, and active TCP connection state updating live in the browser.*
 
-![Terminal and browser side by side](https://raw.githubusercontent.com/homebrew-ec-foss/Netstacc/main/blog/images/dashboard-terminal.png)
+![Terminal and browser side by side](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/dashboard-terminal.png)
 > *Left: terminal running ping and netcat tests. Right: browser dashboard updating in real time.*
 
 ---
@@ -481,7 +481,7 @@ So when you open `http://10.0.0.1:8080` or `curl` it, our TCP stack is literally
 
 ## References
 
-- [Netstacc Repository](https://github.com/homebrew-ec-foss/Netstacc)
+- [Netstacc Repository](https://github.com/homebrew-foss/Netstacc)
 - [RFC 791 - Internet Protocol](https://datatracker.ietf.org/doc/html/rfc791)
 - [RFC 793 / 9293 - Transmission Control Protocol](https://datatracker.ietf.org/doc/html/rfc9293)
 - [Linux TUN/TAP Documentation](https://www.kernel.org/doc/Documentation/networking/tuntap.txt)
