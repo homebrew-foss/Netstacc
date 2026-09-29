@@ -17,7 +17,7 @@ Tilde 5.0 | 8 min read
 **Mentees:**
 - Aishwarya ([@itsmeAishwarya](https://github.com/itsmeAishwarya))
 - Vansh ([@Vanshdev3](https://github.com/Vanshdev3))
-- Visruth ([@visruth](https://github.com/visruth))
+- Visruth ([@beppvis](https://github.com/beppvis))
 
 **Mentors:**
 - Mahilan Suki
