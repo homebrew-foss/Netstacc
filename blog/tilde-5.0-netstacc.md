@@ -371,7 +371,9 @@ So yeah, TCP is basically a constant loop of:
 * *"What are we supposed to do next?"*
 
 And that's exactly what our state machine handles.
+
 ![TCP Connection Workflow](https://raw.githubusercontent.com/homebrew-foss/Netstacc/main/blog/images/tcp-connection-workflow.png)
+> *The complete state machine workflow for a TCP connection.*
 
 ### The Three-Way Handshake
 
